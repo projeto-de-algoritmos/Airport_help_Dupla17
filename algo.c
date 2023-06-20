@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <float.h>
 
 typedef struct {
     float x;
@@ -18,9 +19,8 @@ double calculateDistance(float x1, float y1, float x2, float y2) {
 void findNearestAirport(Airport* airports, int numAirports, float myX, float myY) {
     double minDistance = -1;
     int closestAirportIndex = -1;
-    int i;
     
-    for (i = 0; i < numAirports; i++) {
+    for (int i = 0; i < numAirports; i++) {
         double distance = calculateDistance(myX, myY, airports[i].x, airports[i].y);
         if (minDistance == -1 || distance < minDistance) {
             minDistance = distance;
@@ -30,7 +30,7 @@ void findNearestAirport(Airport* airports, int numAirports, float myX, float myY
     
     if (closestAirportIndex != -1) {
         printf("Nome do Aeroporto: %s\n", airports[closestAirportIndex].name);
-        printf("Distancia: %.2f\n Km", minDistance*100);
+        printf("Distancia: %.2f Km\n", minDistance);
     }
     else {
         printf("No airports found.\n");
@@ -38,7 +38,7 @@ void findNearestAirport(Airport* airports, int numAirports, float myX, float myY
 }
 
 int main() {
-    FILE* file = fopen("./Airports.csv", "r");
+    FILE* file = fopen("Airports.csv", "r");
     if (file == NULL) {
         printf("Failed to open the CSV file.\n");
         return 1;
@@ -67,7 +67,7 @@ int main() {
         airports[airportIndex].y = atof(token);
         
         token = strtok(NULL, ",");
-        strncpy(airports[airportIndex].name, token, sizeof(airports[airportIndex].name));
+        strncpy(airports[airportIndex].name, token, sizeof(airports[airportIndex].name) - 1);
         
         airportIndex++;
     }
@@ -84,3 +84,4 @@ int main() {
     
     return 0;
 }
+
